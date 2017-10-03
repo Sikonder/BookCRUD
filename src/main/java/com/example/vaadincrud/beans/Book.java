@@ -1,21 +1,47 @@
 package com.example.vaadincrud.beans;
 
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.util.Date;
 
 @Entity
 @Table(name = "customers")
 public class Book {
     @Id
     @GeneratedValue
-    @Column(name = "id")
     private Long id;
-    @Column(name ="title")
     private String title;
-    @Column(name = "description")
     private String description;
-    @Column(name = "author")
     private String author;
     private String isbn;
+    private LocalDate printYear;
+
+    public boolean isReadAlready() {
+        return readAlready;
+    }
+
+    public void setReadAlready(boolean readAlready) {
+        this.readAlready = readAlready;
+    }
+
+    private boolean readAlready;
+
+    public LocalDate getPrintYear() {
+        return printYear;
+    }
+
+    public void setPrintYear(LocalDate printYear) {
+        this.printYear = printYear;
+    }
+
+    public Book(String title, String description, String author, String isbn, LocalDate printYear, boolean readAlready) {
+        this.title = title;
+        this.description = description;
+        this.author = author;
+        this.isbn = isbn;
+        this.printYear = printYear;
+        this.readAlready = readAlready;
+    }
 
     public String getIsbn() {
         return isbn;
@@ -25,12 +51,7 @@ public class Book {
         this.isbn = isbn;
     }
 
-    public Book(String title, String description, String author, String isbn) {
-        this.title = title;
-        this.description = description;
-        this.author = author;
-        this.isbn = isbn;
-    }
+
 
 
     public String getAuthor() {

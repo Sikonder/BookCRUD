@@ -46,7 +46,9 @@ public class VaadinUI extends UI {
         setContent(mainLayout);
 
         grid.setHeight(300, Unit.PIXELS);
-        grid.setColumns("id", "title", "description","author","isbn");
+        grid.setWidth(600,Unit.PIXELS);
+        grid.setColumns("id", "title", "description","author","isbn","printYear","readAlready");
+
 
         filter.setPlaceholder("Filter by title");
 
@@ -62,7 +64,7 @@ public class VaadinUI extends UI {
         });
 
         // Instantiate and edit new Book the new button is clicked
-        addNewBtn.addClickListener(e -> editor.editCustomer(new Book("", "","","")));
+        addNewBtn.addClickListener(e -> editor.editCustomer(new Book("", "","","",null,false)));
 
         // Listen changes made by the editor, refresh data from backend
         editor.setChangeHandler(() -> {

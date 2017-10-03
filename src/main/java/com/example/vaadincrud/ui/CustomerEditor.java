@@ -2,6 +2,7 @@ package com.example.vaadincrud.ui;
 
 import com.example.vaadincrud.beans.Book;
 import com.example.vaadincrud.repository.CustomerRepository;
+import com.vaadin.ui.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.data.Binder;
@@ -9,10 +10,6 @@ import com.vaadin.event.ShortcutAction;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.CssLayout;
-import com.vaadin.ui.TextField;
-import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 
 @SpringComponent
@@ -31,6 +28,9 @@ public class CustomerEditor extends VerticalLayout {
     TextField description = new TextField("Description");
     TextField author = new TextField("Author");
     TextField isbn = new TextField("ISBN");
+    DateField printYear = new DateField("Print Year");
+    CheckBox readAlready = new CheckBox("Already read");
+
 
     /* Action buttons */
     Button save = new Button("Save", FontAwesome.SAVE);
@@ -44,7 +44,12 @@ public class CustomerEditor extends VerticalLayout {
     public CustomerEditor(CustomerRepository repository) {
         this.repository = repository;
 
-        addComponents(title, description, author, isbn, actions);
+        printYear.setDateFormat("yyyy-MM-dd");
+
+
+        printYear.setPlaceholder("yyyy-mm-dd");
+
+        addComponents(title, description, author, isbn, printYear,readAlready, actions);
 
         // bind using naming convention
         binder.bindInstanceFields(this);
