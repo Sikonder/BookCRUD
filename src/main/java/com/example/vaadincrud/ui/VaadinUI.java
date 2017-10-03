@@ -1,6 +1,6 @@
 package com.example.vaadincrud.ui;
 
-import com.example.vaadincrud.beans.Customer;
+import com.example.vaadincrud.beans.Book;
 import com.example.vaadincrud.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
@@ -23,7 +23,7 @@ public class VaadinUI extends UI {
 
     private final CustomerEditor editor;
 
-    final Grid<Customer> grid;
+    final Grid<Book> grid;
 
     final TextField filter;
 
@@ -33,9 +33,9 @@ public class VaadinUI extends UI {
     public VaadinUI(CustomerRepository repo, CustomerEditor editor) {
         this.repo = repo;
         this.editor = editor;
-        this.grid = new Grid<>(Customer.class);
+        this.grid = new Grid<>(Book.class);
         this.filter = new TextField();
-        this.addNewBtn = new Button("New customer", FontAwesome.PLUS);
+        this.addNewBtn = new Button("New book", FontAwesome.PLUS);
     }
 
     @Override
@@ -46,9 +46,9 @@ public class VaadinUI extends UI {
         setContent(mainLayout);
 
         grid.setHeight(300, Unit.PIXELS);
-        grid.setColumns("id", "firstName", "lastName");
+        grid.setColumns("id", "title", "description","author","isbn");
 
-        filter.setPlaceholder("Filter by last name");
+        filter.setPlaceholder("Filter by title");
 
         // Hook logic to components
 
@@ -56,13 +56,13 @@ public class VaadinUI extends UI {
         filter.setValueChangeMode(ValueChangeMode.LAZY);
         filter.addValueChangeListener(e -> listCustomers(e.getValue()));
 
-        // Connect selected Customer to editor or hide if none is selected
+        // Connect selected Book to editor or hide if none is selected
         grid.asSingleSelect().addValueChangeListener(e -> {
             editor.editCustomer(e.getValue());
         });
 
-        // Instantiate and edit new Customer the new button is clicked
-        addNewBtn.addClickListener(e -> editor.editCustomer(new Customer("", "")));
+        // Instantiate and edit new Book the new button is clicked
+        addNewBtn.addClickListener(e -> editor.editCustomer(new Book("", "","","")));
 
         // Listen changes made by the editor, refresh data from backend
         editor.setChangeHandler(() -> {
@@ -80,7 +80,7 @@ public class VaadinUI extends UI {
             grid.setItems(repo.findAll());
         }
         else {
-            grid.setItems(repo.findByLastNameStartsWithIgnoreCase(filterText));
+            grid.setItems(repo.findByTitleStartsWithIgnoreCase(filterText));
         }
     }
 

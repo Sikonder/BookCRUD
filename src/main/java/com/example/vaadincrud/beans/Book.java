@@ -4,15 +4,42 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "customers")
-public class Customer {
+public class Book {
     @Id
     @GeneratedValue
     @Column(name = "id")
     private Long id;
-    @Column(name ="firstName")
-    private String firstName;
-    @Column(name = "lastName")
-    private String lastName;
+    @Column(name ="title")
+    private String title;
+    @Column(name = "description")
+    private String description;
+    @Column(name = "author")
+    private String author;
+    private String isbn;
+
+    public String getIsbn() {
+        return isbn;
+    }
+
+    public void setIsbn(String isbn) {
+        this.isbn = isbn;
+    }
+
+    public Book(String title, String description, String author, String isbn) {
+        this.title = title;
+        this.description = description;
+        this.author = author;
+        this.isbn = isbn;
+    }
+
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
 
     public Long getId() {
         return id;
@@ -22,27 +49,24 @@ public class Customer {
         this.id = id;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getTitle() {
+        return title;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public String getLastName() {
-        return lastName;
+    public String getDescription() {
+        return description;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public Customer(String firstName, String lastName) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-    }
 
-    public Customer() {
+
+    public Book() {
     }
 }

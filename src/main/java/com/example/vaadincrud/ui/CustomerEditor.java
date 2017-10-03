@@ -1,6 +1,6 @@
 package com.example.vaadincrud.ui;
 
-import com.example.vaadincrud.beans.Customer;
+import com.example.vaadincrud.beans.Book;
 import com.example.vaadincrud.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -24,11 +24,13 @@ public class CustomerEditor extends VerticalLayout {
     /**
      * The currently edited customer
      */
-    private Customer customer;
+    private Book customer;
 
-    /* Fields to edit properties in Customer entity */
-    TextField firstName = new TextField("First name");
-    TextField lastName = new TextField("Last name");
+    /* Fields to edit properties in Book entity */
+    TextField title = new TextField("Title");
+    TextField description = new TextField("Description");
+    TextField author = new TextField("Author");
+    TextField isbn = new TextField("ISBN");
 
     /* Action buttons */
     Button save = new Button("Save", FontAwesome.SAVE);
@@ -36,13 +38,13 @@ public class CustomerEditor extends VerticalLayout {
     Button delete = new Button("Delete", FontAwesome.TRASH_O);
     CssLayout actions = new CssLayout(save, cancel, delete);
 
-    Binder<Customer> binder = new Binder<>(Customer.class);
+    Binder<Book> binder = new Binder<>(Book.class);
 
     @Autowired
     public CustomerEditor(CustomerRepository repository) {
         this.repository = repository;
 
-        addComponents(firstName, lastName, actions);
+        addComponents(title, description, author, isbn, actions);
 
         // bind using naming convention
         binder.bindInstanceFields(this);
@@ -65,7 +67,7 @@ public class CustomerEditor extends VerticalLayout {
         void onChange();
     }
 
-    public final void editCustomer(Customer c) {
+    public final void editCustomer(Book c) {
         if (c == null) {
             setVisible(false);
             return;
@@ -90,7 +92,7 @@ public class CustomerEditor extends VerticalLayout {
         // A hack to ensure the whole form is visible
         save.focus();
         // Select all text in firstName field automatically
-        firstName.selectAll();
+        title.selectAll();
     }
 
     public void setChangeHandler(ChangeHandler h) {
