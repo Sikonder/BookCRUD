@@ -12,9 +12,11 @@ import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.themes.ValoTheme;
 
+import javax.xml.soap.Text;
+
 @SpringComponent
 @UIScope
-public class CustomerEditor extends VerticalLayout {
+public class BookEditor extends VerticalLayout {
 
     private final CustomerRepository repository;
 
@@ -28,8 +30,9 @@ public class CustomerEditor extends VerticalLayout {
     TextField description = new TextField("Description");
     TextField author = new TextField("Author");
     TextField isbn = new TextField("ISBN");
-    DateField printYear = new DateField("Print Year");
-    CheckBox readAlready = new CheckBox("Already read");
+    TextField printYear = new TextField("Print Year");
+
+
 
 
     /* Action buttons */
@@ -41,15 +44,11 @@ public class CustomerEditor extends VerticalLayout {
     Binder<Book> binder = new Binder<>(Book.class);
 
     @Autowired
-    public CustomerEditor(CustomerRepository repository) {
+    public BookEditor(CustomerRepository repository) {
         this.repository = repository;
 
-        printYear.setDateFormat("yyyy-MM-dd");
 
-
-        printYear.setPlaceholder("yyyy-mm-dd");
-
-        addComponents(title, description, author, isbn, printYear,readAlready, actions);
+        addComponents(title, description, author, isbn, printYear, actions);
 
         // bind using naming convention
         binder.bindInstanceFields(this);
@@ -63,7 +62,7 @@ public class CustomerEditor extends VerticalLayout {
         // wire action buttons to save, delete and reset
         save.addClickListener(e -> repository.save(customer));
         delete.addClickListener(e -> repository.delete(customer));
-        cancel.addClickListener(e -> editCustomer(customer));
+        cancel.addClickListener(e -> createBook(customer));
         setVisible(false);
     }
 
@@ -72,11 +71,14 @@ public class CustomerEditor extends VerticalLayout {
         void onChange();
     }
 
-    public final void editCustomer(Book c) {
+
+    public final void createBook(Book c) {
         if (c == null) {
             setVisible(false);
             return;
         }
+
+
         final boolean persisted = c.getId() != null;
         if (persisted) {
             // Find fresh entity for editing
@@ -84,6 +86,37 @@ public class CustomerEditor extends VerticalLayout {
         }
         else {
             customer = c;
+        }
+        // Bind customer properties to similarly named fields
+        // Could also use annotation or "manual binding" or programmatically
+        // moving values from fields to entities before saving
+        binder.setBean(customer);
+
+        setVisible(true);
+
+        // A hack to ensure the whole form is visible
+        save.focus();
+        // Select all text in firstName field automatically
+        title.selectAll();
+    }
+    public final void editCustomer(Book c) {
+        if (c == null) {
+            setVisible(false);
+            return;
+        }
+        author.setEnabled(false);
+
+
+        final boolean persisted = c.getId() != null;
+        if (persisted) {
+            // Find fresh entity for editing
+            customer = repository.findOne(c.getId());
+        }
+        else {
+            customer = c;
+        }
+        if(!c.isReadAlready()){
+            c.setReadAlready(true);
         }
         cancel.setVisible(persisted);
 

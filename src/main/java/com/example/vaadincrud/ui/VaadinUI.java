@@ -20,19 +20,17 @@ import com.vaadin.ui.VerticalLayout;
 public class VaadinUI extends UI {
 
     private final CustomerRepository repo;
-
-    private final CustomerEditor editor;
-
+    private final BookEditor editor;
     final Grid<Book> grid;
-
     final TextField filter;
 
     private final Button addNewBtn;
 
     @Autowired
-    public VaadinUI(CustomerRepository repo, CustomerEditor editor) {
+    public VaadinUI(CustomerRepository repo, BookEditor editor) {
         this.repo = repo;
         this.editor = editor;
+
         this.grid = new Grid<>(Book.class);
         this.filter = new TextField();
         this.addNewBtn = new Button("New book", FontAwesome.PLUS);
@@ -61,10 +59,11 @@ public class VaadinUI extends UI {
         // Connect selected Book to editor or hide if none is selected
         grid.asSingleSelect().addValueChangeListener(e -> {
             editor.editCustomer(e.getValue());
+
         });
 
         // Instantiate and edit new Book the new button is clicked
-        addNewBtn.addClickListener(e -> editor.editCustomer(new Book("", "","","",null,false)));
+        addNewBtn.addClickListener(e -> editor.createBook(new Book("", "","","","",false)));
 
         // Listen changes made by the editor, refresh data from backend
         editor.setChangeHandler(() -> {

@@ -14,7 +14,7 @@ public class Book {
     private String description;
     private String author;
     private String isbn;
-    private LocalDate printYear;
+    private String printYear;
 
     public boolean isReadAlready() {
         return readAlready;
@@ -26,15 +26,15 @@ public class Book {
 
     private boolean readAlready;
 
-    public LocalDate getPrintYear() {
+    public String getPrintYear() {
         return printYear;
     }
 
-    public void setPrintYear(LocalDate printYear) {
+    public void setPrintYear(String printYear) {
         this.printYear = printYear;
     }
 
-    public Book(String title, String description, String author, String isbn, LocalDate printYear, boolean readAlready) {
+    public Book(String title, String description, String author, String isbn, String printYear, boolean readAlready) {
         this.title = title;
         this.description = description;
         this.author = author;
