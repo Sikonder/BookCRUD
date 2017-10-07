@@ -1,7 +1,7 @@
 package com.example.vaadincrud.ui;
 
 import com.example.vaadincrud.beans.Book;
-import com.example.vaadincrud.repository.CustomerRepository;
+import com.example.vaadincrud.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 
@@ -19,7 +19,7 @@ import com.vaadin.ui.VerticalLayout;
 @SpringUI
 public class VaadinUI extends UI {
 
-    private final CustomerRepository repo;
+    private final BookRepository repo;
     private final BookEditor editor;
     final Grid<Book> grid;
     final TextField filter;
@@ -27,7 +27,7 @@ public class VaadinUI extends UI {
     private final Button addNewBtn;
 
     @Autowired
-    public VaadinUI(CustomerRepository repo, BookEditor editor) {
+    public VaadinUI(BookRepository repo, BookEditor editor) {
         this.repo = repo;
         this.editor = editor;
 
@@ -38,40 +38,41 @@ public class VaadinUI extends UI {
 
     @Override
     protected void init(VaadinRequest request) {
-        // build layout
+
         HorizontalLayout actions = new HorizontalLayout(filter, addNewBtn);
         VerticalLayout mainLayout = new VerticalLayout(actions, grid, editor);
         setContent(mainLayout);
 
         grid.setHeight(300, Unit.PIXELS);
-        grid.setWidth(600,Unit.PIXELS);
+        grid.setWidth(1200,Unit.PIXELS);
         grid.setColumns("id", "title", "description","author","isbn","printYear","readAlready");
+
 
 
         filter.setPlaceholder("Filter by title");
 
-        // Hook logic to components
 
-        // Replace listing with filtered content when user changes filter
+
+
         filter.setValueChangeMode(ValueChangeMode.LAZY);
         filter.addValueChangeListener(e -> listCustomers(e.getValue()));
 
-        // Connect selected Book to editor or hide if none is selected
+
         grid.asSingleSelect().addValueChangeListener(e -> {
             editor.editCustomer(e.getValue());
 
         });
 
-        // Instantiate and edit new Book the new button is clicked
+
         addNewBtn.addClickListener(e -> editor.createBook(new Book("", "","","","",false)));
 
-        // Listen changes made by the editor, refresh data from backend
+
         editor.setChangeHandler(() -> {
             editor.setVisible(false);
             listCustomers(filter.getValue());
         });
 
-        // Initialize listing
+
         listCustomers(null);
     }
 
